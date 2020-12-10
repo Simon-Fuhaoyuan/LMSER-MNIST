@@ -24,6 +24,11 @@ class AutoEncoder(nn.Module):
             nn.Linear(128, 28*28, bias=False),
             nn.Tanh(),
         )
+
+    @property
+    def __name__(self):
+        return 'AutoEncoder'
+
     def forward(self, x):
         x = self.encoder(x)
         x = self.decoder(x)

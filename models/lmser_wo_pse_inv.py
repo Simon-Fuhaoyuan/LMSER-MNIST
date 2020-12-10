@@ -13,6 +13,10 @@ class LmserWoPseudoInverse(nn.Module):
         self.l2 = nn.Linear(128, 64, bias=False)
         self.l3 = nn.Linear(64, 16, bias=False)
     
+    @property
+    def __name__(self):
+        return 'LmserWoPseudoInverse'
+
     def forward(self, x):
         w3 = self.l3.weight.T
         w2 = self.l2.weight.T

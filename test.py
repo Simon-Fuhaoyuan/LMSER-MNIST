@@ -7,6 +7,7 @@ import numpy as np
 import os
 
 from models import *
+from utils import vis_image
 
 def parser_args():
     parser = argparse.ArgumentParser(description='Train reconstruction task on mnist dataset.')
@@ -37,12 +38,47 @@ def l2_error(prediction, gt):
 
     return error
 
-def test(model, device, test_loader):
+def vis_test(config, model, device, test_loader):
+    model.eval()
+
+    images, labels = next(iter(test_loader))
+    images = images.view(-1, 784).to(device)
+    labels = labels.to(device)
+
+    out = model(images).view(config.batch_size, 1, 28, 28)
+    vis_image(config, out, labels)
+
+def vis_test_supervise(config, model, device, test_loader):
+    model.eval()
+
+    images, labels = next(iter(test_loader))
+    images = images.view(-1, 784).to(device)
+    labels = labels.to(device)
+
+    out, _ = model(images)
+    out = out.view(config.batch_size, 1, 28, 28)
+    vis_image(config, out, labels)
+
+def test(config, model, device, test_loader):
     model.eval()
     total_error = 0.0
     for i, (images, labels) in enumerate(test_loader):
         images = images.view(-1, 784).to(device)
         out = model(images)
+
+        error = l2_error(out, images)
+        total_error += error
+    avg_error = total_error / len(test_loader)
+    print('Test error is %.4f' % avg_error)
+    
+    return avg_error
+
+def test_supervise(config, model, device, test_loader):
+    model.eval()
+    total_error = 0.0
+    for i, (images, labels) in enumerate(test_loader):
+        images = images.view(-1, 784).to(device)
+        out, _ = model(images)
 
         error = l2_error(out, images)
         total_error += error

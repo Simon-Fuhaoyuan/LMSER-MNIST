@@ -1,12 +1,3 @@
-'''
-Description: This file is to train a reconstruction network with a given model.
-Usage: python train.py $MODEL_NAME [alternatie_parameters]
-    Please make sure $MODEL_NAME is the same with that in models folder.
-Parameters: Details in parser_args() function.
-Behaviors: After training, this code will automatically make a folder at ./${weight_dir}/${current_time}/
-    This folder will copy your config, and store the best model, as well as training loss, test error, and sample images.
-'''
-
 import torch
 import torch.nn as nn
 import torchvision
@@ -20,7 +11,7 @@ import time
 from models import *
 from utils import save_best_model, make_dirs, save_config
 from utils import vis_error, vis_loss, vis_loss_error, vis_image
-from test import test, vis_test
+from test import test_supervise, vis_test_supervise
 
 def parser_args():
     parser = argparse.ArgumentParser(description='Train reconstruction task on mnist dataset.')
@@ -51,25 +42,35 @@ def train(config, model, optim, criterion, device, train_loader, test_loader=Non
     min_loss = 999
     min_loss_epoch = 0
     total_loss = 0.0
+    total_class_loss = 0.0
 
     min_error = 999
     min_error_epoch = 0
 
+    supervise_crit = nn.CrossEntropyLoss().to(device)
+    param = 0.5
+
     for epoch in range(config.epochs):
         for i, (images, labels) in enumerate(train_loader):
             images = images.view(-1, 784).to(device)
-            out = model(images)
+            labels = labels.to(device)
+            out, vec = model(images)
 
             optim.zero_grad()
-            loss = criterion(out, images)
+            rec_loss = criterion(out, images) # reconstruction loss
+            sup_loss = supervise_crit(vec, labels)
+            loss = rec_loss * param + sup_loss * (1 - param)
             loss.backward()
             optim.step()
-            total_loss += loss.item()
+            total_loss += rec_loss.item()
+            total_class_loss += sup_loss.item()
 
         avg_loss = total_loss / len(train_loader) # avg loss in an image
-        print('[{}/{}] Loss:'.format(epoch + 1, config.epochs), avg_loss)
-        losses.append(avg_loss)
+        avg_class_loss = total_class_loss / len(train_loader)
+        print('[{}/{}] Rec_loss: {}, Class_loss: {}'.format(epoch + 1, config.epochs, avg_loss, avg_class_loss))
+        losses.append(avg_loss + avg_class_loss)
         total_loss = 0.0
+        total_class_loss = 0.0
 
         if config.no_test or test_loader is None:
             if not config.no_test:
@@ -80,13 +81,13 @@ def train(config, model, optim, criterion, device, train_loader, test_loader=Non
                 min_loss_epoch = epoch + 1
                 save_best_model(model, config.weight_dir)
         else:
-            error = test(config, model, device, test_loader)
+            error = test_supervise(config, model, device, test_loader)
             errors.append(error)
             if error < min_error:
                 min_error = error
                 min_error_epoch = epoch + 1
                 save_best_model(model, config.weight_dir)
-                vis_test(config, model, device, test_loader)
+                vis_test_supervise(config, model, device, test_loader)
     
     return losses, errors, min_error, min_error_epoch
 
@@ -98,6 +99,9 @@ if __name__ == '__main__':
     config.weight_dir = os.path.join(config.weight_dir, time_str)
     make_dirs(config.weight_dir)
     save_config(config)
+
+    # supervised version
+    config.model = config.model + 'Supervise'
 
     # transform
     transform = transforms.Compose([transforms.ToTensor(),

@@ -49,6 +49,10 @@ def train(config, model, optim, criterion, device, train_loader, test_loader=Non
 
     supervise_crit = nn.CrossEntropyLoss().to(device)
     param = 0.5
+    if config.dataset == 'mnist':
+        param = 0.7
+    else:
+        param = 0.3
 
     for epoch in range(config.epochs):
         for i, (images, labels) in enumerate(train_loader):

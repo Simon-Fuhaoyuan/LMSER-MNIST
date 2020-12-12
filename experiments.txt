@@ -1,0 +1,29 @@
+Model                   Epoch       Dataset     If_supervised   Error
+AutoEncoder             50          mnist       no              0.0481
+LmserWoPseudoInverse    50          mnist       no              0.0145
+Lmser                   50          mnist       no              0.0167
+
+AutoEncoder             50          f-mnist     no              0.0492
+LmserWoPseudoInverse    50          f-mnist     no              0.0129
+Lmser                   50          f-mnist     no              0.0140
+
+# rec_loss * 0.5 + class_loss * 0.5
+
+AutoEncoder             50          mnist       yes             0.0985
+LmserWoPseudoInverse    50          mnist       yes             0.0341
+Lmser                   50          mnist       yes             0.0338
+
+AutoEncoder             50          f-mnist     yes             0.0781
+LmserWoPseudoInverse    50          f-mnist     yes             0.0290
+Lmser                   50          f-mnist     yes             0.0325
+
+# rec_loss * 0.7 + class_loss * 0.3 for mnist
+# rec_loss * 0.3 + class_loss * 0.7 for fashion-mnist
+
+AutoEncoder             50          mnist       yes             
+LmserWoPseudoInverse    50          mnist       yes             
+Lmser                   50          mnist       yes             
+
+AutoEncoder             50          f-mnist     yes             
+LmserWoPseudoInverse    50          f-mnist     yes             
+Lmser                   50          f-mnist     yes             

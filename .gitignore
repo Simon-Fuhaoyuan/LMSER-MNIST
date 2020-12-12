@@ -3,4 +3,4 @@ __pycache__/
 data/
 images/
 save_dir/
-experiments*
+experiments

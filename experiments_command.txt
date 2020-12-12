@@ -1,0 +1,16 @@
+python train.py AutoEncoder --mean 0.5 --std 0.5
+python train.py LmserWoPseudoInverse
+python train.py Lmser
+
+CUDA_VISIBLE_DEVICES=1 python train.py AutoEncoder --mean 0.5 --std 0.5 --dataset f-mnist
+CUDA_VISIBLE_DEVICES=1 python train.py LmserWoPseudoInverse --dataset f-mnist
+CUDA_VISIBLE_DEVICES=1 python train.py Lmser --dataset f-mnist
+
+python train_supervise.py AutoEncoder --mean 0.5 --std 0.5
+python train_supervise.py LmserWoPseudoInverse
+python train_supervise.py Lmser
+
+CUDA_VISIBLE_DEVICES=1 python train_supervise.py AutoEncoder --mean 0.5 --std 0.5 --dataset f-mnist
+CUDA_VISIBLE_DEVICES=1 python train_supervise.py LmserWoPseudoInverse --dataset f-mnist
+CUDA_VISIBLE_DEVICES=1 python train_supervise.py Lmser --dataset f-mnist
+

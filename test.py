@@ -6,9 +6,25 @@ import torch.utils.data as data
 import numpy as np
 import os
 
-from models import AutoEncoder
-from models import LmserWoPseudoInverse
-from utils import save_best_model
+from models import *
+
+def parser_args():
+    parser = argparse.ArgumentParser(description='Train reconstruction task on mnist dataset.')
+
+    # Compulsory parameters
+    parser.add_argument('model', help='The name of your model', type=str)
+    parser.add_argument('weight', help='The weight file of CNN.', type=str)
+
+    # Alternative parameters
+    parser.add_argument('--batch_size', help='Batch size', default=64, type=int)
+    parser.add_argument('--mean', help='Mean of input data', default=0.5, type=float)
+    parser.add_argument('--std', help='Std of input data', default=0.5, type=float)
+    parser.add_argument('--image_dir', help='The directory to store images', default='images', type=str)
+    parser.add_argument('--cpu_only', help='If specified, training and testing will only use cpu', action='store_true', default=False)
+    
+    config = parser.parse_args()
+
+    return config
 
 def l2_error(prediction, gt):
     prediction = prediction.cpu().detach().numpy()
@@ -36,21 +52,22 @@ def test(model, device, test_loader):
     return avg_error
 
 if __name__ == '__main__':
-    mean = 0.5
-    std = 0.5
-    epochs = 30
-    batch_size = 64
-    lr = 0.003
-
     transform = transforms.Compose([transforms.ToTensor(),
-                               transforms.Normalize(mean=(mean,),std=(std,))])
+                               transforms.Normalize(mean=(config.mean,),std=(config.std,))])
     test_dataset = datasets.MNIST(root='./data/', train=False, transform=transform, download=True)
-    test_loader = data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
+    test_loader = data.DataLoader(dataset=test_dataset, batch_size=config.batch_size, shuffle=False)
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    # device = torch.device('cpu')
+    device = None
+    if config.cpu_only:
+        device = torch.device('cpu')
+    else:
+        if torch.cuda.is_available():
+            device = torch.device('cuda')
+        else:
+            print('Warning: you use CUDA by default, but CUDA is not available. This code will use CPU.')
+            print('If you want to use cpu only, please specify --cpu_only.')
+            device = torch.device('cpu')
 
-    model = AutoEncoder().to(device) # vanilla AE
-    # model = DCW_woConstraint()
+    model = eval(config.model)().to(device)
 
     test(model, device, test_loader)

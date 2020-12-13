@@ -20,10 +20,16 @@ Lmser                   50          f-mnist     yes             0.0325
 # rec_loss * 0.7 + class_loss * 0.3 for mnist
 # rec_loss * 0.3 + class_loss * 0.7 for fashion-mnist
 
-AutoEncoder             50          mnist       yes             
-LmserWoPseudoInverse    50          mnist       yes             
-Lmser                   50          mnist       yes             
+AutoEncoder             50          mnist       yes             0.0868
+LmserWoPseudoInverse    50          mnist       yes             0.0290
+Lmser                   50          mnist       yes             0.0290
 
-AutoEncoder             50          f-mnist     yes             
-LmserWoPseudoInverse    50          f-mnist     yes             
-Lmser                   50          f-mnist     yes             
+AutoEncoder             50          f-mnist     yes             0.0868
+LmserWoPseudoInverse    50          f-mnist     yes             0.0351
+Lmser                   50          f-mnist     yes             0.0395
+
+# rec_loss * 0.7 + class_loss * 0.3 for fashion-mnist
+
+AutoEncoder             50          f-mnist     yes             0.0715
+LmserWoPseudoInverse    50          f-mnist     yes             0.0251
+Lmser                   50          f-mnist     yes             0.0288

@@ -5,13 +5,16 @@ matplotlib.use('AGG')
 import numpy as np
 import torchvision
 
-def vis_image(config, prediction, labels):
+def vis_image(config, prediction, labels, name=None):
     images = prediction.cpu().detach()
     img = torchvision.utils.make_grid(images)
     img = img.numpy().transpose(1, 2, 0)
     img = img * config.std + config.mean
     img = (img - img.min()) / (img.max() - img.min())
-    matplotlib.image.imsave(os.path.join(config.weight_dir, 'result.png'), img)
+    if name is None:
+        matplotlib.image.imsave(os.path.join(config.weight_dir, 'result.png'), img)
+    else:
+        matplotlib.image.imsave(name, img)
 
 def vis_loss_error(config, losses, errors):
     losses = np.array(losses)

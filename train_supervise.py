@@ -52,7 +52,7 @@ def train(config, model, optim, criterion, device, train_loader, test_loader=Non
     if config.dataset == 'mnist':
         param = 0.7
     else:
-        param = 0.3
+        param = 0.7
 
     for epoch in range(config.epochs):
         for i, (images, labels) in enumerate(train_loader):

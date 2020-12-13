@@ -5,6 +5,7 @@ from torchvision import datasets, transforms
 import torch.utils.data as data
 import numpy as np
 import os
+import argparse
 
 from models import *
 from utils import vis_image
@@ -17,6 +18,7 @@ def parser_args():
     parser.add_argument('weight', help='The weight file of CNN.', type=str)
 
     # Alternative parameters
+    parser.add_argument('--dataset', help='The name of the dataset', default='mnist', type=str)
     parser.add_argument('--batch_size', help='Batch size', default=64, type=int)
     parser.add_argument('--mean', help='Mean of input data', default=0.5, type=float)
     parser.add_argument('--std', help='Std of input data', default=0.5, type=float)
@@ -48,16 +50,24 @@ def vis_test(config, model, device, test_loader):
     out = model(images).view(config.batch_size, 1, 28, 28)
     vis_image(config, out, labels)
 
-def vis_test_supervise(config, model, device, test_loader):
+def vis_gt(config, model, device, test_loader, vis_cnt=1):
     model.eval()
 
-    images, labels = next(iter(test_loader))
-    images = images.view(-1, 784).to(device)
-    labels = labels.to(device)
+    for i in range(vis_cnt):
+        images, labels = next(iter(test_loader))
+        images = images.view(config.batch_size, 1, 28, 28)
+        vis_image(config, images, labels, os.path.join(config.image_dir, '%d_gt.png' % (i + 1)))
 
-    out, _ = model(images)
-    out = out.view(config.batch_size, 1, 28, 28)
-    vis_image(config, out, labels)
+def vis_test_supervise(config, model, device, test_loader, vis_cnt=1):
+    model.eval()
+    for i in range(vis_cnt):
+        images, labels = next(iter(test_loader))
+        images = images.view(-1, 784).to(device)
+        labels = labels.to(device)
+
+        out, _ = model(images)
+        out = out.view(config.batch_size, 1, 28, 28)
+        vis_image(config, out, labels)
 
 def test(config, model, device, test_loader):
     model.eval()
@@ -88,9 +98,17 @@ def test_supervise(config, model, device, test_loader):
     return avg_error
 
 if __name__ == '__main__':
+    config = parser_args()
     transform = transforms.Compose([transforms.ToTensor(),
                                transforms.Normalize(mean=(config.mean,),std=(config.std,))])
-    test_dataset = datasets.MNIST(root='./data/', train=False, transform=transform, download=True)
+
+    test_dataset = None
+    test_loader = None
+    if config.dataset == 'mnist':
+        test_dataset = datasets.MNIST(root='./data/', train=False, transform=transform, download=True)
+    else:
+        test_dataset = datasets.FashionMNIST(root='./data/', train=False, transform=transform, download=True)
+        
     test_loader = data.DataLoader(dataset=test_dataset, batch_size=config.batch_size, shuffle=False)
 
     device = None
@@ -106,4 +124,5 @@ if __name__ == '__main__':
 
     model = eval(config.model)().to(device)
 
-    test(model, device, test_loader)
+    # test(model, device, test_loader)
+    vis_gt(config, model, device, test_loader)

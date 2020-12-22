@@ -33,3 +33,43 @@ Lmser                   50          f-mnist     yes             0.0395
 AutoEncoder             50          f-mnist     yes             0.0715
 LmserWoPseudoInverse    50          f-mnist     yes             0.0251
 Lmser                   50          f-mnist     yes             0.0288
+
+# Cross test
+
+Line2 Line6 cross       50          f-mnist     no              0.3900
+Line6 Line2 cross       50          mnist       no              0.1970
+
+Line3 Line7 cross       50          f-mnist     no              0.0782
+Line7 Line3 cross       50          mnist       no              0.0523
+
+Line4 Line8 cross       50          f-mnist     no              0.1032
+Line8 Line4 cross       50          mnist       no              0.0519
+
+Line23 Line33 cross     50          f-mnist     yes             0.3946
+Line33 Line23 cross     50          mnist       yes             0.2437
+
+Line24 Line34 cross     50          f-mnist     yes             0.1048
+Line34 Line24 cross     50          mnist       yes             0.0933
+
+Line25 Line35 cross     50          f-mnist     yes             0.1114
+Line35 Line25 cross     50          mnist       yes             0.0710
+
+# The following is trained with L1 loss
+
+AutoEncoder             50          mnist       no              0.0661
+LmserWoPseudoInverse    50          mnist       no              0.0231
+Lmser                   50          mnist       no              
+
+AutoEncoder             50          f-mnist     no              0.0549
+LmserWoPseudoInverse    50          f-mnist     no              0.0151
+Lmser                   50          f-mnist     no              
+
+# rec_loss * 0.7 + class_loss * 0.3
+
+AutoEncoder             50          mnist       yes             
+LmserWoPseudoInverse    50          mnist       yes             
+Lmser                   50          mnist       yes             
+
+AutoEncoder             50          f-mnist     yes             
+LmserWoPseudoInverse    50          f-mnist     yes             
+Lmser                   50          f-mnist     yes             

@@ -57,12 +57,10 @@ def vis_test(config, model, device, test_loader, vis_cnt=1):
 def vis_gt(config, model, device, test_loader, vis_cnt=1):
     model.eval()
 
-    for i, (images, labels) in enumerate(test_loader):
-        if i == vis_cnt:
-            break
+    for i in range(vis_cnt):
+        images, labels = next(iter(test_loader))
         images = images.view(config.batch_size, 1, 28, 28)
-        make_dirs(os.path.join(config.image_dir, config.dataset))
-        vis_image(config, images, labels, os.path.join(config.image_dir, config.dataset, '%d.png' % (i + 1)))
+        vis_image(config, images, labels, os.path.join(config.image_dir, '%d_gt.png' % (i + 1)))
 
 def vis_test_supervise(config, model, device, test_loader, vis_cnt=1):
     model.eval()
@@ -113,6 +111,8 @@ if __name__ == '__main__':
     transform = transforms.Compose([transforms.ToTensor(),
                                transforms.Normalize(mean=(config.mean,),std=(config.std,))])
 
+    config.model = config.model + 'Supervise'
+
     test_dataset = None
     test_loader = None
     if config.dataset == 'mnist':
@@ -137,5 +137,5 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(config.weight), strict=True)
 
     # test(config, model, device, test_loader)
-    # vis_test(config, model, device, test_loader, 10)
-    vis_gt(config, model, device, test_loader, 10)
+    vis_test_supervise(config, model, device, test_loader, 10)
+    # vis_gt(config, model, device, test_loader)

@@ -7,14 +7,19 @@ import torchvision
 
 def vis_image(config, prediction, labels, name=None):
     images = prediction.cpu().detach()
+    images = images * config.std + config.mean
     img = torchvision.utils.make_grid(images)
     img = img.numpy().transpose(1, 2, 0)
-    img = img * config.std + config.mean
-    img = (img - img.min()) / (img.max() - img.min())
+    # img = (img - img.min()) / (img.max() - img.min())
+    plt.imshow(img)
+    plt.axis('off')
     if name is None:
-        matplotlib.image.imsave(os.path.join(config.weight_dir, 'result.png'), img)
+        # matplotlib.image.imsave(os.path.join(config.weight_dir, 'result.png'), img)
+        plt.savefig(os.path.join(config.weight_dir, 'result.png'), pad_inches=0, bbox_inches='tight')
     else:
-        matplotlib.image.imsave(name, img)
+        # matplotlib.image.imsave(name, img)
+        plt.savefig(name, pad_inches=0, bbox_inches='tight')
+    plt.close()
 
 def vis_loss_error(config, losses, errors):
     losses = np.array(losses)

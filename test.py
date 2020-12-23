@@ -137,5 +137,5 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load(config.weight), strict=True)
 
     # test(config, model, device, test_loader)
-    # vis_test(config, model, device, test_loader, 10)
-    vis_gt(config, model, device, test_loader, 10)
+    vis_test(config, model, device, test_loader, 10)
+    # vis_gt(config, model, device, test_loader, 10)

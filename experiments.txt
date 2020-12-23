@@ -58,18 +58,18 @@ Line35 Line25 cross     50          mnist       yes             0.0710
 
 AutoEncoder             50          mnist       no              0.0661
 LmserWoPseudoInverse    50          mnist       no              0.0231
-Lmser                   50          mnist       no              
+Lmser                   50          mnist       no              0.0840
 
 AutoEncoder             50          f-mnist     no              0.0549
 LmserWoPseudoInverse    50          f-mnist     no              0.0151
-Lmser                   50          f-mnist     no              
+Lmser                   50          f-mnist     no              0.0160
 
 # rec_loss * 0.7 + class_loss * 0.3
 
-AutoEncoder             50          mnist       yes             
-LmserWoPseudoInverse    50          mnist       yes             
-Lmser                   50          mnist       yes             
+AutoEncoder             50          mnist       yes             0.1193
+LmserWoPseudoInverse    50          mnist       yes             0.0334
+Lmser                   50          mnist       yes             0.0539
 
-AutoEncoder             50          f-mnist     yes             
-LmserWoPseudoInverse    50          f-mnist     yes             
-Lmser                   50          f-mnist     yes             
+AutoEncoder             50          f-mnist     yes             0.0800
+LmserWoPseudoInverse    50          f-mnist     yes             0.0236
+Lmser                   50          f-mnist     yes             0.0287

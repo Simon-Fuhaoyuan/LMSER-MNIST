@@ -45,7 +45,7 @@ python train.py [-h] [--epochs EPOCHS] [--batch_size BATCH_SIZE] [--lr LR] \
                 [--mean MEAN] [--std STD] [--dataset DATASET] \
                 [--weight_dir WEIGHT_DIR] [--image_dir IMAGE_DIR] [--cpu_only] \
                 [--no_test] \
-                model \
+                model
 ```
 
 For example, to train AutoEncoder, run
@@ -56,8 +56,8 @@ python train.py AutoEncoder --epochs 50 --batch_size 64 --dataset mnist
 
 To test a model, run 
 ```
-python test.py [-h] [--dataset DATASET] [--batch_size BATCH_SIZE]
-               [--mean MEAN] [--std STD] [--image_dir IMAGE_DIR] [--cpu_only]
+python test.py [-h] [--dataset DATASET] [--batch_size BATCH_SIZE] \
+               [--mean MEAN] [--std STD] [--image_dir IMAGE_DIR] [--cpu_only] \
                model weight
 ```
 

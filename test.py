@@ -107,9 +107,9 @@ def test_supervise(config, model, device, test_loader):
 
 if __name__ == '__main__':
     config = parser_args()
-    if config.model == 'AutoEncoder':
-        config.mean = 0.5
-        config.std = 0.5
+    # if config.model == 'AutoEncoder':
+    #     config.mean = 0.5
+    #     config.std = 0.5
     transform = transforms.Compose([transforms.ToTensor(),
                                transforms.Normalize(mean=(config.mean,),std=(config.std,))])
 

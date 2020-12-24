@@ -31,6 +31,7 @@ git clone https://github.com/Simon-Fuhaoyuan/LMSER-pytorch
 4. Install build requirements
 
 ```
+cd LMSER-pytorch
 pip install -r requirements.txt
 ```
 
@@ -68,6 +69,8 @@ python test.py AutoEncoder ./weight_dir/AutoEncoder.pth --dataset mnist
 ```
 
 The usage of ```train_supervise.py``` and ```test_supervise.py``` is quite similar, but they will load the supervised version of model and train or test.
+
+For more usages, please refer to [experiments_command.txt](https://github.com/Simon-Fuhaoyuan/LMSER-pytorch/blob/main/experiments_command.txt).
 
 ## Results
 

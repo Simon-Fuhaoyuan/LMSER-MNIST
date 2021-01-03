@@ -48,8 +48,8 @@ Line8 Line4 cross       50          mnist       no              0.0519
 Line23 Line33 cross     50          f-mnist     yes             0.3946
 Line33 Line23 cross     50          mnist       yes             0.2437
 
-Line24 Line34 cross     50          f-mnist     yes             0.1048
-Line34 Line24 cross     50          mnist       yes             0.0933
+Line24 Line34 cross     50          f-mnist     yes             0.1001
+Line34 Line24 cross     50          mnist       yes             0.0883
 
 Line25 Line35 cross     50          f-mnist     yes             0.1114
 Line35 Line25 cross     50          mnist       yes             0.0710

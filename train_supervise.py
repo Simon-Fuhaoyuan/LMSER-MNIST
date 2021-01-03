@@ -91,7 +91,7 @@ def train(config, model, optim, criterion, device, train_loader, test_loader=Non
                 min_error = error
                 min_error_epoch = epoch + 1
                 save_best_model(model, config.weight_dir)
-                vis_test_supervise(config, model, device, test_loader)
+                # vis_test_supervise(config, model, device, test_loader)
     
     return losses, errors, min_error, min_error_epoch
 
@@ -142,8 +142,8 @@ if __name__ == '__main__':
     # model, optimizer and loss
     model = eval(config.model)().to(device)
     optim = torch.optim.Adam(model.parameters(), lr = config.lr)
-    # criterion = nn.MSELoss().to(device)
-    criterion = nn.L1Loss(reduction='mean').to(device)
+    criterion = nn.MSELoss().to(device)
+    # criterion = nn.L1Loss(reduction='mean').to(device)
 
     losses, errors, min_error, min_error_epoch = train(config, model, optim, criterion, device, train_loader, test_loader)
     vis_loss(config, losses)

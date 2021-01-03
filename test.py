@@ -107,9 +107,9 @@ def test_supervise(config, model, device, test_loader):
 
 if __name__ == '__main__':
     config = parser_args()
-    # if config.model == 'AutoEncoder':
-    #     config.mean = 0.5
-    #     config.std = 0.5
+    if config.model == 'AutoEncoder':
+        config.mean = 0.5
+        config.std = 0.5
     transform = transforms.Compose([transforms.ToTensor(),
                                transforms.Normalize(mean=(config.mean,),std=(config.std,))])
 
@@ -136,6 +136,6 @@ if __name__ == '__main__':
     model = eval(config.model)().to(device)
     model.load_state_dict(torch.load(config.weight), strict=True)
 
-    # test(config, model, device, test_loader)
+    test(config, model, device, test_loader)
     vis_test(config, model, device, test_loader, 10)
     # vis_gt(config, model, device, test_loader, 10)
